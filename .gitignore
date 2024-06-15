@@ -11,6 +11,9 @@
 npm-debug.log
 yarn-error.log
 
+# profiling files
+chrome-profiler-events*.json
+
 # IDEs and editors
 .idea/
 .project
@@ -40,3 +43,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+.vercel

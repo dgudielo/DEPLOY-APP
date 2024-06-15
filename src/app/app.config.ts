@@ -1,25 +1,34 @@
-export interface AppSettings {
-  dir: 'ltr' | 'rtl';
-  theme: string;
-  sidenavOpened: boolean;
-  sidenavCollapsed: boolean;
-  boxed: boolean;
-  horizontal: boolean;
-  activeTheme: string;
-  language: string;
-  cardBorder: boolean;
-  navPos: 'side' | 'top';
-}
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import {
+  provideRouter,
+  withEnabledBlockingInitialNavigation,
+  withHashLocation,
+  withInMemoryScrolling,
+  withRouterConfig,
+  withViewTransitions
+} from '@angular/router';
 
-export const defaults: AppSettings = {
-  dir: 'ltr',
-  theme: 'light',
-  sidenavOpened: false,
-  sidenavCollapsed: false,
-  boxed: true,
-  horizontal: false,
-  cardBorder: false,
-  activeTheme: 'blue_theme',
-  language: 'en-us',
-  navPos: 'side',
+import { DropdownModule, SidebarModule } from '@coreui/angular';
+import { IconSetService } from '@coreui/icons-angular';
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes,
+      withRouterConfig({
+        onSameUrlNavigation: 'reload'
+      }),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled'
+      }),
+      withEnabledBlockingInitialNavigation(),
+      withViewTransitions(),
+      withHashLocation()
+    ),
+    importProvidersFrom(SidebarModule, DropdownModule),
+    IconSetService,
+    provideAnimations()
+  ]
 };
