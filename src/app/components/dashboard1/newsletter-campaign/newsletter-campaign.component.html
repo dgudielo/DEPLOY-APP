@@ -1,0 +1,29 @@
+<mat-card class="cardWithShadow">
+  <mat-card-header>
+    <div class="d-sm-flex justify-content-between w-100">
+      <div class="m-b-4">
+        <mat-card-title>Estadistica Anual - {{ Anio }}</mat-card-title>
+        <mat-card-subtitle>Descripcion general de servicios Anual</mat-card-subtitle>
+      </div>
+      <div class="d-flex justify-content-end gap-10">
+        <mat-card-title>Total servicios Anual: {{newsletterchartOptions.Total.data}}</mat-card-title>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="p-y-24">
+    <apx-chart
+      [series]="newsletterchartOptions.series"
+      [chart]="newsletterchartOptions.chart"
+      [xaxis]="newsletterchartOptions.xaxis"
+      [stroke]="newsletterchartOptions.stroke"
+      [tooltip]="newsletterchartOptions.tooltip"
+      [dataLabels]="newsletterchartOptions.dataLabels"
+      [legend]="newsletterchartOptions.legend"
+      [colors]="newsletterchartOptions.colors"
+      [markers]="newsletterchartOptions.markers"
+      [fill]="newsletterchartOptions.fill"
+      [grid]="newsletterchartOptions.grid"
+    ></apx-chart>
+  </mat-card-content>
+</mat-card>
+

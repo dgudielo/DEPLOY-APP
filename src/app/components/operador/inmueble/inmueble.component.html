@@ -1,0 +1,179 @@
+<div [formGroup]="addForm">
+  <div class="table-responsive">
+    <table class="table table-hover b-1 no-wrap w-100 rounded">
+      <tbody style="display: flex; flex-wrap: wrap">
+        <mat-card-content class="cardWithShadow theme-card overflow-hidden">
+          <mat-card-title class="d-flex align-items-center text-primary">
+            <i-tabler name="home" class="icon-18 d-flex"></i-tabler>
+            Inmuebles:
+          </mat-card-title>
+          <div *ngIf="!hasRows">
+            <div class="text-center m-t-30">
+              <button color="primary" mat-flat-button (click)="onAddRow()">
+                Añadir inmueble
+              </button>
+            </div>
+          </div>
+
+          @for(row of addForm.get('rows')['controls']; track row; let index =
+          $index) {
+          <mat-card-content class="cardWithShadow theme-card overflow-hidden">
+            <mat-card-content class="bg-light-primary text-white p-y-10">
+              <mat-card-title class="d-flex align-items-center text-primary">
+                <i-tabler name="home" class="icon-18 d-flex"></i-tabler>
+                Inmueble No. {{ index + 1 }}
+              </mat-card-title>
+
+              <div class="row m-t-200">
+                <div class="col-lg-4">
+                  <div>
+                    <mat-form-field
+                      appearance="outline"
+                      class="example-full-width input-small-size d-block"
+                    >
+                      <mat-label>Propietario. </mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        class="form-control"
+                        [formControl]="row.get('Propietario')"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div>
+                    <mat-form-field
+                      appearance="outline"
+                      class="example-full-width input-small-size d-block"
+                    >
+                      <mat-label>Lugar de Inicio.</mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        class="form-control"
+                        [formControl]="row.get('Lugar_Inicio_Incendio')"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div>
+                    <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                      <mat-label>Causa.
+                      </mat-label>
+                      <mat-select [formControl]="row.get('Cod_Causa')">
+                        <mat-option *ngFor="let Cat_Causas of Cat_Causas" [value]="Cat_Causas.Cod_Causa">{{
+                          Cat_Causas.Descripcion }}</mat-option>
+  
+                      </mat-select>
+  
+                    </mat-form-field>
+  
+                  </div>
+  
+                </div>
+
+                <div class="col-lg-4">
+                  <div>
+                    <mat-form-field
+                      appearance="outline"
+                      class="example-full-width input-small-size d-block"
+                    >
+                      <mat-label>Valor aprox. inmueble </mat-label>
+                      <input
+                        type="number"
+                        matInput
+                        class="form-control"
+                        [formControl]="row.get('Valor_Aproximado')"
+                      />
+                      <mat-icon matPrefix>
+                        <i-tabler name="coin" class="icon-20 d-flex"></i-tabler>
+                      </mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+
+                
+                <div class="col-lg-4">
+                  <div>
+                    <mat-form-field
+                      appearance="outline"
+                      class="example-full-width input-small-size d-block"
+                    >
+                      <mat-label>Perdida aprox. inmueble </mat-label>
+                      <input
+                        type="number"
+                        matInput
+                        class="form-control"
+                        [formControl]="row.get('Perdidas_Aproximadas')"
+                      />
+                      <mat-icon matPrefix>
+                        <i-tabler name="coin" class="icon-20 d-flex"></i-tabler>
+                      </mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div>
+                    <mat-form-field
+                      appearance="outline"
+                      class="example-full-width input-small-size d-block"
+                    >
+                      <mat-label>Compañia Aseguradora. </mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        class="form-control"
+                        [formControl]="row.get('Compania_Aseguradora')"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row m-t-200">
+                <div
+                  appearance="outline"
+                  class="example-full-width input-small-size d-block"
+                >
+                  <button
+                    color="warn"
+                    mat-icon-button
+                    (click)="onRemoveRow(index)"
+                    class="d-flex justify-content-center"
+                  >
+                    <i-tabler name="trash" class="icon-18 d-flex"></i-tabler>
+                  </button>
+                </div>
+                <div
+                  appearance="outline"
+                  class="example-full-width input-small-size d-block"
+                >
+                  <button
+                    color="primary"
+                    mat-icon-button
+                    (click)="onAddRow()"
+                    class="d-flex justify-content-center"
+                  >
+                    <i-tabler
+                      name="circle-plus"
+                      class="icon-18 d-flex"
+                    ></i-tabler>
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+
+            <tr></tr>
+          </mat-card-content>
+          }
+        </mat-card-content>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,440 @@
+<div *ngIf="showForm"> <!-- Mostrar el formulario solo si showForm es true -->
+  <mat-card class="cardWithShadow theme-card">
+    <!-- <mat-card>
+      <mat-card-header> -->
+    <div class="row">
+      <div class="col-lg-2">
+      </div>
+      <div class="col-lg-1">
+        <div class="text-center">
+          <img mat-card-image src="/assets/images/logos/logo-completo-cvb-login.png" style="width: 140px;">
+        </div>
+      </div>
+      <div class="col-lg-7 m-b-1 f-w-800">
+        <div style="text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;">
+          <div style="text-align: left;">
+            <span style="font-size: 18px;">BENEMÉRITO CUERPO VOLUNTARIO DE BOMBEROS DE GUATEMALA</span><br>
+            <span style="font-size: 14px;">Formulario de servicio {{ fgFormOperador.get('Cod_Compania')?.value }}
+              compañia</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2">
+
+      </div>
+    </div>
+    <!-- </mat-card-header>
+    </mat-card> -->
+    <div [formGroup]="fgFormOperador">
+      <mat-card-content class="b-t-1">
+        <!-- <form [formGroup]="fgOperadorHeader"> -->
+        <form>
+          <!--Formulario de registro Linea 1-->
+          <div class="row m-t-200">
+            <div class="col-lg-2">
+              <!-- input seleccionar compañia-->
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block"
+                hideRequiredMarker>
+                <mat-label>Cia.</mat-label>
+                <mat-select formControlName="Cod_Compania" required>
+                  <mat-option *ngFor="let company of selectedCompanies" [value]="company">
+                    {{ company }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+            <!-- input seleccionar Tipo servicio-->
+            <div class="col-lg-2">
+
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Tipo de servicio.</mat-label>
+                <mat-select formControlName="Cod_Servicio" required
+                  (selectionChange)="OnreiniciarSubFormulario($event)">
+                  <mat-option *ngFor="let  tipoServicios of  tipoServicio" [value]="tipoServicios.Cod_Servicio">{{
+                    tipoServicios.Descripcion_Servicio}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- input seleccionar Clase servicio-->
+            <div class="col-lg-3">
+
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Clase de servicio.</mat-label>
+                <mat-select formControlName="Cod_Clase_Servicio" required>
+                  <mat-option *ngFor="let  claseServicios of  claseServicio"
+                    [value]="claseServicios.Cod_Clase_Servicio">{{ claseServicios.Des_Clase_Servicio}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- input seleccionar fecha servicio-->
+            <div class="col-lg-3">
+
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Fecha de servicio.</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="Fecha_Servicio" required />
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- input numero interno-->
+            <div class="col-lg-2">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block" color="primary">
+                <mat-label>Numero Interno.</mat-label>
+                <input matInput type="number" formControlName="NoInterno" required min="0" />
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <!--Formulario de registro Linea 2-->
+          <div class="row m-t-200">
+            <div class="col-lg-2">
+              <!-- input seleccionar DEPARTAMENTO-->
+
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Departamento.</mat-label>
+                <mat-select formControlName="Cod_Depto" required [value]="departamento[0]?.Cod_Depto">
+                  <mat-option *ngFor="let  departamentos of  departamento" [value]="departamentos.Cod_Depto">
+                    {{departamentos.Nombre_Depto}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- input seleccionar Tipo Municipio-->
+            <div class="col-lg-2">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Municipio.</mat-label>
+                <mat-select formControlName="Cod_Muni" required>
+                  <mat-option *ngFor="let municipio of municipios" [value]="municipio.codigo">
+                    {{municipio.nombre}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+            <!-- input seleccionar Tipo Area-->
+            <div class="col-lg-2">
+
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Área.</mat-label>
+                <mat-select formControlName="Area" required>
+                  <mat-option value="Rural">Rural</mat-option>
+                  <mat-option value="Urbana">Urbana</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- input seleccionar Lugar ubicacion-->
+            <div class="col-lg-2" *ngIf="datosmunicipios && datosmunicipios.length > 0">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Lugar/Ubicación.</mat-label>
+                <mat-select formControlName="Cod_Lugar">
+                  <mat-option *ngFor="let datosmunicipio of datosmunicipios" [value]="datosmunicipio.codigo">{{
+                    datosmunicipio.nombre }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- input seleccionar Zona-->
+            <div class="col-lg-1">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block" color="primary">
+                <mat-label>Zona.</mat-label>
+                <input matInput type="number" formControlName="Zona" required min="0" />
+              </mat-form-field>
+            </div>
+
+
+            <!-- input seleccionar Direccion-->
+            <div class="col-lg-{{datosmunicipios && datosmunicipios.length > 0 ? '3' : '5'}}">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block" color="primary">
+                <mat-label>Dirección.</mat-label>
+                <input matInput type="text" formControlName="Direccion" required />
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <!--Formulario de registro Linea 3-->
+          <div class="row m-t-200">
+            <div class="col-lg-5">
+              <!-- input solicitantes-->
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block" color="primary">
+                <mat-label>Nombre del ó (los) solicitante(s).</mat-label>
+                <input matInput type="text" formControlName="Nombre_Solicitante" required
+                  onkeydown="return /[a-z, ]/i.test(event.key)" />
+              </mat-form-field>
+            </div>
+
+            <!-- input seleccionar forma aviso-->
+            <div class="col-lg-2">
+
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Tipo de Aviso.</mat-label>
+                <mat-select formControlName="Cod_TipoAviso" required>
+                  <mat-option *ngFor="let tipoAvisos of tipoAviso" [value]="tipoAvisos.Cod_TipoAviso">{{
+                    tipoAvisos.Descripcion_Aviso }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- input seleccionar Telefono-->
+            <div class="col-lg-2" *ngIf="fgFormOperador?.get('Cod_TipoAviso')?.value === 1">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block" color="primary">
+                <mat-label>Telefono.</mat-label>
+                <input matInput type="number" formControlName="NoTelefono" required />
+              </mat-form-field>
+            </div>
+
+
+            <!-- input seleccionar Radio/Telefonista-->
+            <div class="col-lg-{{fgFormOperador?.get('Cod_TipoAviso')?.value === 1 ? 3 : 5}}">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Radio/Telefonista.</mat-label>
+                <mat-select formControlName="Carnet_RadioTelefonista" required>
+                  <mat-option *ngFor="let personalRadioTels of personalRadioTel" [value]="personalRadioTels.Carnet">{{
+                    personalRadioTels.Nombre }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+          </div>
+
+          <!--Formulario de registro Linea 4-->
+          <div class="row m-t-200">
+            <div class="col-lg-2">
+              <!-- input seleccionar compañia-->
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block"
+                hideRequiredMarker>
+                <mat-label>Cia Salida.</mat-label>
+                <mat-select formControlName="Cod_Compania_Salida" required [disabled]="true">
+                  <mat-option value="44">44</mat-option>
+                  <mat-option value="71">71</mat-option>
+                  <mat-option value="0">-</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+            <!-- input seleccionar fecha salida-->
+            <div class="col-lg-2">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Fecha Salida.
+                </mat-label>
+                <input matInput type="text" [matDatepicker]="picker1" formControlName="Fecha_Salida" required>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-2">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Hora Salida.
+                </mat-label>
+                <input matInput [ngxMatTimepicker]="timepicker1" [format]="24" formControlName="Hora_Salida_String"
+                  required>
+                <ngx-mat-timepicker-toggle matSuffix [for]="timepicker1"></ngx-mat-timepicker-toggle>
+                <ngx-mat-timepicker #timepicker1></ngx-mat-timepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-2">
+              <!-- input seleccionar compañia-->
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block"
+                hideRequiredMarker>
+                <mat-label>Cia Entrada.</mat-label>
+                <mat-select formControlName="Cod_Compania_Entrada" required [disabled]="true">
+                  <mat-option *ngFor="let company of selectedCompanies" [value]="company">
+                    {{ company }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- input seleccionar fecha entrada-->
+            <div class="col-lg-2">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Fecha Entrada.
+                </mat-label>
+                <input matInput type="text" [matDatepicker]="picker2" formControlName="Fecha_Entrada" required>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+
+            <div class="col-lg-2">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Hora Entrada.
+                </mat-label>
+                <input matInput [ngxMatTimepicker]="timepicker2" [format]="24" formControlName="Hora_Entrada_String"
+                  required>
+                <ngx-mat-timepicker-toggle matSuffix [for]="timepicker2"></ngx-mat-timepicker-toggle>
+                <ngx-mat-timepicker #timepicker2></ngx-mat-timepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <br>
+          <!--Formulario de registro Linea 5-->
+          <div class="row m-t-200">
+            <div class="col-lg-12">
+              <!-- <app-ejemplo></app-ejemplo> -->
+              <app-personasatendidas [catTraslado]="catTraslado"
+                (FormUpdatedPersonasAtendidas)="onFormUpdatedPersonasAtendidas($event)"></app-personasatendidas>
+            </div>
+          </div>
+
+          <!--INMUEBLE-->
+          <div class="row m-t-200" *ngIf="fgFormOperador?.get('Cod_Servicio')?.value === 4">
+
+            <div class="col-lg-12">
+              <app-inmueble [Cat_Causas]="catCausas"
+                (FormUpdatedInmueble)="onFormUpdatedInmueble($event)"></app-inmueble>
+            </div>
+
+          </div>
+          <!--INMUEBLE-->
+          <br>
+          <!--VEHICULO-->
+          <div class="row m-t-200" *ngIf="fgFormOperador?.get('Cod_Servicio')?.value === 4">
+
+            <div class="col-lg-12">
+              <app-vehiculo [Cat_Vehiculo]="catVehiculo"
+                (FormUpdatedVehiculo)="onFormUpdatedVehiculo($event)"></app-vehiculo>
+            </div>
+
+          </div>
+          <!--VEHICULO-->
+          <br>
+          <div style="text-align: left;">
+            <hr style="border: 1px solid black; width: 100%;">
+            <span style="font-size: 18px; opacity: 0.7;"> Recursos Cia.</span><br>
+            <span style="font-size: 14px; color: rgba(0, 0, 0, 0.6);"> Listado de unidades y personal destacado que
+              atendieron la emergencia.</span>
+            <hr style="border: 1px solid black; width: 100%;">
+          </div>
+
+
+
+          <br>
+          <!--UNIDAD-->
+          <div class="row m-t-200">
+
+
+            <div class="col-lg-6">
+              <app-unidades [Cat_Unidad]="catUnidad" [Pilotos]="pilotosOutPut"
+                (FormUpdatedUnidades)="onFormUpdatedUnidad($event)"></app-unidades>
+            </div>
+
+
+            <div class="col-lg-6">
+              <app-perdestacada [Bombero]="personalOutPut"
+                (FormUpdatedBomberos)="onFormUpdatedBomberos($event)"></app-perdestacada>
+
+            </div>
+          </div>
+          <br>
+          <div class="row m-t-200">
+            <div class="col-lg-12">
+              <!-- <app-ejemplo></app-ejemplo> -->
+            </div>
+            <div class="col-lg-6">
+            </div>
+          </div>
+          <!--Formulario de registro Linea 5-->
+          <div class="row m-t-200">
+            <div class="col-lg-12">
+              <!-- input solicitantes-->
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block" color="primary">
+                <mat-label>Observaciones.</mat-label>
+                <textarea matInput formControlName="Observaciones" maxlength="500" rows="4"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!--Formulario de registro Linea 6-->
+          <div class="row m-t-200">
+            <!-- Formulado por-->
+            <div class="col-lg-3">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Formulado Por.</mat-label>
+                <mat-select formControlName="Carnet_FormuladoPor" required>
+                  <mat-option *ngFor="let persona of personal" [value]="persona.Carnet">{{ persona.Nombre
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Conforme Piloto-->
+            <div class="col-lg-3">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Conforme Piloto</mat-label>
+                <mat-select formControlName="Carnet_ConformePiloto" required>
+                  <mat-option *ngFor="let piloto of pilotos" [value]="piloto.Carnet">{{ piloto.Nombre }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Vo.Bo-->
+            <div class="col-lg-3">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Vo.Bo.</mat-label>
+                <mat-select formControlName="Carnet_VoBo" required>
+                  <mat-option *ngFor="let vobos of vobo" [value]="vobos.Carnet">{{ vobos.Nombre }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-3">
+              <mat-form-field appearance="outline" class="example-full-width input-small-size d-block">
+                <mat-label>Fecha de para firma.
+                </mat-label>
+                <input matInput type="text" [matDatepicker]="picker4" formControlName="Fecha_Firma" required>
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="text-right p-24 p-t-0"
+            style="display: flex; flex-direction: column-reverse; align-items: center;">
+            <button id="SavePerfil" mat-flat-button color="primary" class="m-r-8" (click)="submit()">Guardar
+              Servicio</button>
+            <!-- <button mat-stroked-button color="warn">Cancel</button> -->
+          </div>
+        </form>
+      </mat-card-content>
+      <!-- <pre>{{fgFormOperador.value| json}}</pre> -->
+    </div>
+  </mat-card>
+</div>
+
+<div *ngIf="!showForm">
+  <div class="col-lg-7">
+    <mat-card class="cardWithShadow theme-card">
+      <mat-card-header>
+        <mat-card-title class="mb-4">Acciones</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="b-t-1">
+        <div class="row m-t-200">
+          <div class="col-lg-3">
+            <button mat-raised-button color="primary" (click)="GuardarPDF()">Imprimir</button>
+          </div>
+          <div class="col-lg-3">
+            <button mat-raised-button color="warn" (click)="reiniciarFormulario()">Crear Nuevo</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="p-16 bg-light-primary rounded m-y-20">
+    <h5 class="mat-subtitle-2 text-primary d-flex align-items-center f-w-600">
+      <i-tabler name="info-circle" class="icon-20 m-r-8 d-flex"></i-tabler>El servicio fue guardado correctamente con el
+      número: {{NoControlGrabado}}
+    </h5>
+  </div>
+</div>
